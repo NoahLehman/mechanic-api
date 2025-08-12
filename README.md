@@ -24,27 +24,29 @@ Implements full CRUD for mechanics, ticket creation, and assignment/removal of m
 - **SQLite** – Default database (configurable)
 
 ## Project Structure
+```text
 Mechanic_service_api/
 │
 ├── app/
-│ ├── init.py # App factory, blueprint registration
-│ ├── extensions.py # DB & Marshmallow initialization
-│ ├── models.py # SQLAlchemy models and relationships
-│ │
-│ ├── mechanic/
-│ │ ├── init.py
-│ │ ├── routes.py # CRUD routes for mechanics
-│ │ └── schemas.py # Mechanic schema
-│ │
-│ └── service_ticket/
-│ ├── init.py
-│ ├── routes.py # Ticket CRUD + assign/remove mechanic
-│ └── schemas.py # Ticket schema
+│   ├── __init__.py            # App factory, blueprint registration
+│   ├── extensions.py          # DB & Marshmallow initialization
+│   ├── models.py              # SQLAlchemy models and relationships
 │
-├── config.py # Config class (DB URI, etc.)
-├── init_db.py # Script to create DB tables
-├── mechanic-postman.json # Postman collection for testing
+│   ├── mechanic/
+│   │   ├── __init__.py
+│   │   ├── routes.py          # CRUD routes for mechanics
+│   │   └── schemas.py         # Mechanic schema
+│
+│   └── service_ticket/
+│       ├── __init__.py
+│       ├── routes.py          # Ticket CRUD + assign/remove mechanic
+│       └── schemas.py         # Ticket schema
+│
+├── config.py                  # Config class (DB URI, etc.)
+├── init_db.py                 # Script to create DB tables
+├── mechanic-postman.json      # Postman collection for testing
 └── requirements.txt
+```
 
 ## Setup Instructions
 
