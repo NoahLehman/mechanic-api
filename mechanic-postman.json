@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "50682a11-e3aa-4bab-9843-1ca9bdd455cc",
+		"name": "My Collection",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47278058",
+		"_collection_link": "https://noahilehman06-337222.postman.co/workspace/Noah-Lehman's-Workspace~4f9acfb2-6973-4bd5-837a-817059bb1f1f/collection/47278058-50682a11-e3aa-4bab-9843-1ca9bdd455cc?action=share&source=collection_link&creator=47278058"
+	},
+	"item": [
+		{
+			"name": "post mechanic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Alex Johnson\",\r\n  \"skill_level\": \"Senior\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/mechanics/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"mechanics",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get mechanics",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/mechanics/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"mechanics",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put mechanic by id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"skill_level\": \"Lead\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/mechanics/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"mechanics",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete mechanic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"skill_level\": \"Lead\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/mechanics/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"mechanics",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get service tickets",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5001/service-tickets/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"service-tickets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post service ticket",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"Oil change & inspection\",\r\n  \"status\": \"open\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/service-tickets/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"service-tickets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "assign mechanic to ticket",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"Oil change & inspection\",\r\n  \"status\": \"open\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/service-tickets/1/assign-mechanic/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"service-tickets",
+						"1",
+						"assign-mechanic",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove mechanic from ticket",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"Oil change & inspection\",\r\n  \"status\": \"open\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/service-tickets/1/remove-mechanic/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"service-tickets",
+						"1",
+						"remove-mechanic",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:5001",
+			"type": "default"
+		}
+	]
+}
