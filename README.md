@@ -75,6 +75,7 @@ Runs at **http://127.0.0.1:5001**
 
 ### Customers
 - **POST** `/customers/login` → Login & receive JWT  
+
   ```json
   { "email": "test@example.com", "password": "password123" }
 
