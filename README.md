@@ -65,8 +65,6 @@ python init_db.py
 ```bash
 python run.py
 ```
-
-````markdown
 ## Server
 
 Runs at **http://127.0.0.1:5001**
@@ -79,7 +77,7 @@ Runs at **http://127.0.0.1:5001**
 - **POST** `/customers/login` → Login & receive JWT  
   ```json
   { "email": "test@example.com", "password": "password123" }
-````
+
 
 * **GET** `/customers/my-tickets` → Requires `Authorization: Bearer <token>`
 
