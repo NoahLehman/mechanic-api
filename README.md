@@ -66,10 +66,6 @@ python init_db.py
 python run.py
 ```
 
-I see what you mean — the **content is right**, but the way it’s laid out looks like a big wall of text instead of a nicely structured README section. The issue is just formatting.
-
-Here’s a **cleaned-up Markdown version** of exactly what you wrote, but presented in a “pretty” format with headers, code blocks, and bullet points:
-
 ````markdown
 ## Server
 
