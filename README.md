@@ -1,143 +1,145 @@
-Mechanic Service API
+# Mechanic Service API
 
-A Flask-based REST API for managing mechanics, customers, service tickets, and inventory.
-This project demonstrates authentication with JWT, rate limiting, caching, and advanced database relationships.
+A Flask-based REST API for managing **customers, mechanics, service tickets, and inventory**.  
+This project demonstrates **JWT authentication, rate limiting, caching, and advanced database relationships**.
 
-Features
+---
 
-Authentication
+## Features
 
-Customer login with JWT token
+-  **Authentication**
+  - Customer login with JWT
+  - Protected routes requiring token
+-  **Rate Limiting & Caching**
+  - Login route rate-limited
+  - Cached customer lists & tickets
+-  **Mechanics**
+  - Ranked by tickets completed
+-  **Service Tickets**
+  - Create, list, update (assign/remove mechanics)
+  - Attach parts from inventory
+-  **Inventory**
+  - Full CRUD operations
+  - Many-to-many relationship with tickets
 
-Protected routes requiring valid token
+---
 
-Rate Limiting & Caching
+## Tech Stack
 
-Rate-limited login route
+- [Flask](https://flask.palletsprojects.com/)  
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)  
+- [Flask-Limiter](https://flask-limiter.readthedocs.io/)  
+- [Flask-Caching](https://flask-caching.readthedocs.io/)  
+- [Marshmallow](https://marshmallow.readthedocs.io/)  
+- [Python-Jose](https://python-jose.readthedocs.io/)  
+- SQLite (default) – easily swappable for Postgres/MySQL  
 
-Cached customer list & tickets
+---
 
-Customer
+## Setup
 
-Login
-
-View their own service tickets
-
-Mechanics
-
-View mechanics ordered by number of tickets worked
-
-Service Tickets
-
-Create, list, update (assign/remove mechanics)
-
-Attach inventory parts
-
-Inventory
-
-Full CRUD: create, read, update, delete
-
-Link parts to service tickets
-
-Tech Stack
-
-Flask
-
-Flask-SQLAlchemy
-
-Flask-Limiter
-
-Flask-Caching
-
-Marshmallow
-
-Python-Jose (JWT)
-
-SQLite (default, easily swapped with Postgres/MySQL)
-
-Setup
-1. Clone Repository
+### 1. Clone Repository
+```bash
 git clone <your-repo-url>
 cd Mechanic_service_api
+```
 
-2. Create Virtual Environment
+### 2. Create Virtual Environment
+```bash
 python3 -m venv venv
 source venv/bin/activate    # Linux/macOS
 venv\Scripts\activate       # Windows
+```
 
-3. Install Dependencies
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-4. Initialize Database
+### 5. Initialize Database
+```bash
 python init_db.py
+```
 
-5. Run Server
+### 7. Run the Server
+```bash
 python run.py
+```
 
+I see what you mean — the **content is right**, but the way it’s laid out looks like a big wall of text instead of a nicely structured README section. The issue is just formatting.
 
-App runs at http://127.0.0.1:5001
+Here’s a **cleaned-up Markdown version** of exactly what you wrote, but presented in a “pretty” format with headers, code blocks, and bullet points:
 
-Endpoints
-Customers
+````markdown
+## Server
 
-POST /customers/login → Get JWT token
+Runs at **http://127.0.0.1:5001**
 
-{ "email": "test@example.com", "password": "password123" }
+---
 
+## Endpoints
 
-GET /customers/my-tickets → Requires Authorization: Bearer <token>
+### Customers
+- **POST** `/customers/login` → Login & receive JWT  
+  ```json
+  { "email": "test@example.com", "password": "password123" }
+````
 
-Mechanics
+* **GET** `/customers/my-tickets` → Requires `Authorization: Bearer <token>`
 
-GET /mechanics/top → Returns mechanics ordered by tickets worked
+---
 
-Service Tickets
+### Mechanics
 
-GET /service_tickets/ → List all tickets
+* **GET** `/mechanics/top` → Mechanics ranked by tickets worked
 
-PUT /service_tickets/<ticket_id>/edit → Add/remove mechanics
+---
 
-{
-  "add_ids": [1],
-  "remove_ids": [2]
-}
+### Service Tickets
 
+* **GET** `/service_tickets/` → List tickets
+* **PUT** `/service_tickets/<ticket_id>/edit` → Add/remove mechanics
 
-POST /service_tickets/<ticket_id>/add-part/<part_id> → Attach inventory item
+  ```json
+  {
+    "add_ids": [1],
+    "remove_ids": [2]
+  }
+  ```
+* **POST** `/service_tickets/<ticket_id>/add-part/<part_id>` → Attach inventory item
 
-Inventory
+---
 
-POST /inventory/ → Create
+### Inventory
 
-{ "name": "Oil Filter", "price": 14.99 }
+* **POST** `/inventory/` → Create
 
+  ```json
+  { "name": "Oil Filter", "price": 14.99 }
+  ```
+* **GET** `/inventory/` → List all
+* **PUT** `/inventory/<id>` → Update part
+* **DELETE** `/inventory/<id>` → Remove part
 
-GET /inventory/ → List
+---
 
-PUT /inventory/<id> → Update
+## Testing with Postman
 
-DELETE /inventory/<id> → Delete
+1. Import the provided **`new_mechanic_app.postman_collection.json`**
+2. Run requests in order:
 
-Testing with Postman
+   * Login (get JWT)
+   * Use token in `Authorization: Bearer <token>` header
+   * Test mechanics, tickets, and inventory CRUD
 
-Import the provided new_mechanic_app.postman_collection.json
+---
 
-Run requests in order:
+## Assignment Coverage
 
-Login → Copy JWT token
-
-Access protected endpoints using Authorization: Bearer <token>
-
-Test mechanics, service tickets, and inventory CRUD
-
-Assignment Coverage
-
-✔️ Rate Limiting & Caching
-✔️ JWT Token Authentication
-✔️ Customer Login + My Tickets
-✔️ Mechanic Ranking Query
-✔️ Service Ticket Update (add/remove mechanics)
-✔️ Inventory Model + CRUD + Relation to Tickets
-✔️ Postman Collection Export
-
-✅ Meets all required project requirements
+*  Rate Limiting & Caching
+*  JWT Token Authentication
+*  Customer Login + My Tickets
+*  Mechanic Ranking Query
+*  Service Ticket Update (add/remove mechanics)
+*  Inventory Model + CRUD + Relation to Tickets
+*  Postman Collection Export
