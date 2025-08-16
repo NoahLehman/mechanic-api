@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 from werkzeug.security import check_password_hash
 from sqlalchemy.exc import SQLAlchemyError
+from flask import g
+
 
 from extensions import db, limiter, cache
 from auth import encode_token, token_required

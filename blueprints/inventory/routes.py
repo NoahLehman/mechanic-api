@@ -11,7 +11,6 @@ inventory_bp = Blueprint("inventory", __name__)
 # CREATE
 @inventory_bp.post("/")
 @token_required
-@role_required("mechanic")
 def create_part():
     data = request.get_json() or {}
     part = Inventory(name=data.get("name"), price=data.get("price"))
@@ -39,7 +38,6 @@ def get_part(part_id: int):
 # UPDATE
 @inventory_bp.put("/<int:part_id>")
 @token_required
-@role_required("mechanic")
 def update_part(part_id: int):
     part = Inventory.query.get_or_404(part_id)
     data = request.get_json() or {}
@@ -57,7 +55,6 @@ def update_part(part_id: int):
 # DELETE
 @inventory_bp.delete("/<int:part_id>")
 @token_required
-@role_required("mechanic")
 def delete_part(part_id: int):
     part = Inventory.query.get_or_404(part_id)
     db.session.delete(part)

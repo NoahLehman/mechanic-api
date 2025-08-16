@@ -11,7 +11,6 @@ service_tickets_bp = Blueprint("service_tickets", __name__)
 # PUT /service_tickets/<ticket_id>/edit : add/remove mechanics
 @service_tickets_bp.put("/<int:ticket_id>/edit")
 @token_required
-@role_required("mechanic")  # restrict to mechanics (optional but recommended)
 def edit_ticket_mechanics(ticket_id: int):
     st = ServiceTicket.query.get_or_404(ticket_id)
     payload = request.get_json() or {}
@@ -35,7 +34,6 @@ def edit_ticket_mechanics(ticket_id: int):
 # POST /service_tickets/<ticket_id>/parts : add a single part to an existing ticket
 @service_tickets_bp.post("/<int:ticket_id>/parts")
 @token_required
-@role_required("mechanic")
 def add_part_to_ticket(ticket_id: int):
     st = ServiceTicket.query.get_or_404(ticket_id)
     body = request.get_json() or {}
