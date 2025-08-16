@@ -1,85 +1,143 @@
-# Mechanic Service API
+Mechanic Service API
 
-A Flask-based REST API for managing mechanics and service tickets, built with SQLAlchemy and Marshmallow.  
-Implements full CRUD for mechanics, ticket creation, and assignment/removal of mechanics from tickets.
+A Flask-based REST API for managing mechanics, customers, service tickets, and inventory.
+This project demonstrates authentication with JWT, rate limiting, caching, and advanced database relationships.
 
-## Features
+Features
 
-### Mechanics (`/mechanics`)
-- **POST `/`** – Create a new mechanic.
-- **GET `/`** – Retrieve all mechanics.
-- **PUT `/<id>`** – Update a mechanic by ID.
-- **DELETE `/<id>`** – Delete a mechanic by ID.
+Authentication
 
-### Service Tickets (`/service-tickets`)
-- **POST `/`** – Create a new service ticket.
-- **GET `/`** – Retrieve all service tickets.
-- **PUT `/<ticket_id>/assign-mechanic/<mechanic_id>`** – Assign a mechanic to a ticket.
-- **PUT `/<ticket_id>/remove-mechanic/<mechanic_id>`** – Remove a mechanic from a ticket.
+Customer login with JWT token
 
-## Tech Stack
-- **Flask** – Web framework
-- **Flask-SQLAlchemy** – ORM for database operations
-- **Flask-Marshmallow / Marshmallow-SQLAlchemy** – Serialization/deserialization
-- **SQLite** – Default database (configurable)
+Protected routes requiring valid token
 
-## Project Structure
-```text
-Mechanic_service_api/
-│
-├── app/
-│   ├── __init__.py            # App factory, blueprint registration
-│   ├── extensions.py          # DB & Marshmallow initialization
-│   ├── models.py              # SQLAlchemy models and relationships
-│
-│   ├── mechanic/
-│   │   ├── __init__.py
-│   │   ├── routes.py          # CRUD routes for mechanics
-│   │   └── schemas.py         # Mechanic schema
-│
-│   └── service_ticket/
-│       ├── __init__.py
-│       ├── routes.py          # Ticket CRUD + assign/remove mechanic
-│       └── schemas.py         # Ticket schema
-│
-├── config.py                  # Config class (DB URI, etc.)
-├── init_db.py                 # Script to create DB tables
-├── mechanic-postman.json      # Postman collection for testing
-└── requirements.txt
-```
+Rate Limiting & Caching
 
-## Setup Instructions
+Rate-limited login route
 
-1. **Clone the repository**
-```bash
-git clone <repo_url>
+Cached customer list & tickets
+
+Customer
+
+Login
+
+View their own service tickets
+
+Mechanics
+
+View mechanics ordered by number of tickets worked
+
+Service Tickets
+
+Create, list, update (assign/remove mechanics)
+
+Attach inventory parts
+
+Inventory
+
+Full CRUD: create, read, update, delete
+
+Link parts to service tickets
+
+Tech Stack
+
+Flask
+
+Flask-SQLAlchemy
+
+Flask-Limiter
+
+Flask-Caching
+
+Marshmallow
+
+Python-Jose (JWT)
+
+SQLite (default, easily swapped with Postgres/MySQL)
+
+Setup
+1. Clone Repository
+git clone <your-repo-url>
 cd Mechanic_service_api
-```
 
-2. **Create & activate a virtual environment**
-```bash
-**python -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate      # Windows
-```
+2. Create Virtual Environment
+python3 -m venv venv
+source venv/bin/activate    # Linux/macOS
+venv\Scripts\activate       # Windows
 
-3. **Install dependencies**
-```bash
+3. Install Dependencies
 pip install -r requirements.txt
-```
 
-4. **Initialize the database**
-
-```bash
+4. Initialize Database
 python init_db.py
-```
-5. **Run the app**
-```bash
-flask --app app run --debug
-```
 
-Test with Postman
+5. Run Server
+python run.py
 
-Import mechanic-postman.json into Postman.
 
-Set the base_url variable to http://localhost:5001.
+App runs at http://127.0.0.1:5001
+
+Endpoints
+Customers
+
+POST /customers/login → Get JWT token
+
+{ "email": "test@example.com", "password": "password123" }
+
+
+GET /customers/my-tickets → Requires Authorization: Bearer <token>
+
+Mechanics
+
+GET /mechanics/top → Returns mechanics ordered by tickets worked
+
+Service Tickets
+
+GET /service_tickets/ → List all tickets
+
+PUT /service_tickets/<ticket_id>/edit → Add/remove mechanics
+
+{
+  "add_ids": [1],
+  "remove_ids": [2]
+}
+
+
+POST /service_tickets/<ticket_id>/add-part/<part_id> → Attach inventory item
+
+Inventory
+
+POST /inventory/ → Create
+
+{ "name": "Oil Filter", "price": 14.99 }
+
+
+GET /inventory/ → List
+
+PUT /inventory/<id> → Update
+
+DELETE /inventory/<id> → Delete
+
+Testing with Postman
+
+Import the provided new_mechanic_app.postman_collection.json
+
+Run requests in order:
+
+Login → Copy JWT token
+
+Access protected endpoints using Authorization: Bearer <token>
+
+Test mechanics, service tickets, and inventory CRUD
+
+Assignment Coverage
+
+✔️ Rate Limiting & Caching
+✔️ JWT Token Authentication
+✔️ Customer Login + My Tickets
+✔️ Mechanic Ranking Query
+✔️ Service Ticket Update (add/remove mechanics)
+✔️ Inventory Model + CRUD + Relation to Tickets
+✔️ Postman Collection Export
+
+✅ Meets all required project requirements
