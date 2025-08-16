@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from extensions import db, limiter, cache
 from auth import encode_token, token_required
 from models import Customer, ServiceTicket
-from schemas import login_schema, Customer, ServiceTicketSchema  # adjust imports for your setup
+from schemas import login_schema, CustomerSchema, ServiceTicketSchema
 
 customers_bp = Blueprint("customers", __name__)
 
