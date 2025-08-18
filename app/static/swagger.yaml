@@ -1,0 +1,444 @@
+openapi: 3.0.3
+info:
+  title: Mechanic Service API
+  version: 1.0.0
+  description: API for managing customers, mechanics, service tickets, and inventory.
+servers:
+  - url: http://localhost:5001
+tags:
+  - name: Auth
+  - name: Customers
+  - name: Mechanics
+  - name: ServiceTickets
+  - name: Inventory
+
+paths:
+  /customers:
+    get:
+      tags: [Customers]
+      summary: List customers
+      description: Returns a paginated list of customers.
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, example: 1 }
+          description: Page number
+        - in: query
+          name: per_page
+          schema: { type: integer, example: 20 }
+          description: Items per page
+      responses:
+        '200':
+          description: Paginated customers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Customer' }
+                  page: { type: integer, example: 1 }
+                  per_page: { type: integer, example: 20 }
+                  total: { type: integer, example: 42 }
+                  pages: { type: integer, example: 3 }
+              example:
+                items:
+                  - { id: 1, email: "test@example.com" }
+                page: 1
+                per_page: 20
+                total: 1
+                pages: 1
+
+  /customers/login:
+    post:
+      tags: [Auth]
+      summary: Login customer
+      description: Authenticates a customer and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPayload'
+            example:
+              email: "test@example.com"
+              password: "password123"
+      responses:
+        '200':
+          description: JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+            description: Invalid credentials
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message: { type: string }
+                example:
+                  message: "Invalid credentials"
+
+  /customers/my-tickets:
+    get:
+      tags: [Customers]
+      summary: Get my service tickets
+      description: Returns service tickets for the authenticated customer.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of customer service tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ServiceTicket' }
+              example:
+                - id: 10
+                  description: "Brake squeaking issue"
+                  customer_id: 1
+                  mechanics:
+                    - { id: 2, name: "Bob Builder" }
+                  parts:
+                    - { id: 5, name: "Brake Pad", price: 39.99 }
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              example:
+                message: "Missing Bearer token"
+
+  /mechanics/leaderboard:
+    get:
+      tags: [Mechanics]
+      summary: Mechanics leaderboard
+      description: Returns mechanics ordered by most tickets worked.
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, example: 50 }
+          description: Max number of mechanics to return
+      responses:
+        '200':
+          description: List of mechanics with ticket counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    mechanic: { $ref: '#/components/schemas/Mechanic' }
+                    ticket_count: { type: integer }
+              example:
+                - mechanic: { id: 2, name: "Bob Builder" }
+                  ticket_count: 7
+
+  /inventory:
+    get:
+      tags: [Inventory]
+      summary: List inventory
+      description: Returns all parts in the inventory.
+      responses:
+        '200':
+          description: List of parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Inventory' }
+              example:
+                - { id: 1, name: "Brake Pad", price: 39.99 }
+                - { id: 2, name: "Oil Filter", price: 14.99 }
+    post:
+      tags: [Inventory]
+      summary: Create inventory part
+      description: Adds a new inventory item.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InventoryPayload' }
+            example:
+              name: "Bulb"
+              price: 5.00
+      responses:
+        '201':
+          description: Created part
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Inventory' }
+              example: { id: 3, name: "Bulb", price: 5.0 }
+        '400':
+          description: Part name must be unique
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              example:
+                message: "Part name must be unique"
+        '401':
+          description: Missing or invalid token
+
+  /inventory/{part_id}:
+    get:
+      tags: [Inventory]
+      summary: Get inventory part
+      description: Returns a single inventory item by ID.
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Inventory part
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Inventory' }
+              example: { id: 1, name: "Brake Pad", price: 39.99 }
+        '404':
+          description: Part not found
+    put:
+      tags: [Inventory]
+      summary: Update inventory part
+      description: Updates an existing inventory item.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InventoryPayload' }
+            example:
+              name: "Oil Filter"
+              price: 15.99
+      responses:
+        '200':
+          description: Updated part
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Inventory' }
+              example: { id: 2, name: "Oil Filter", price: 15.99 }
+        '400':
+          description: Part name must be unique
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              example:
+                message: "Part name must be unique"
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Part not found
+    delete:
+      tags: [Inventory]
+      summary: Delete inventory part
+      description: Deletes an inventory item by ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Part deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              example:
+                message: "deleted"
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Part not found
+
+  /service_tickets/{ticket_id}/edit:
+    put:
+      tags: [ServiceTickets]
+      summary: Edit service ticket mechanics
+      description: Adds or removes mechanics from a service ticket.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EditTicketPayload' }
+            example:
+              add_ids: [2]
+              remove_ids: [3]
+      responses:
+        '200':
+          description: Updated service ticket
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ServiceTicket' }
+              example:
+                id: 10
+                description: "Brake squeaking issue"
+                customer_id: 1
+                mechanics: [{ id: 2, name: "Bob Builder" }]
+                parts: []
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Ticket not found
+
+  /service_tickets/{ticket_id}/parts:
+    post:
+      tags: [ServiceTickets]
+      summary: Add part to service ticket
+      description: Adds an inventory part to an existing service ticket.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddPartPayload' }
+            example:
+              inventory_id: 5
+      responses:
+        '201':
+          description: Updated service ticket
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ServiceTicket' }
+              example:
+                id: 10
+                description: "Brake squeaking issue"
+                customer_id: 1
+                mechanics: [{ id: 2, name: "Bob Builder" }]
+                parts: [{ id: 5, name: "Brake Pad", price: 39.99 }]
+        '400':
+          description: Missing inventory_id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              example:
+                message: "inventory_id is required"
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Ticket or part not found
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginPayload:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, example: "test@example.com" }
+        password: { type: string, example: "password123" }
+
+    Customer:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        email: { type: string, example: "test@example.com" }
+
+    Mechanic:
+      type: object
+      properties:
+        id: { type: integer, example: 2 }
+        name: { type: string, example: "Bob Builder" }
+
+    Inventory:
+      type: object
+      properties:
+        id: { type: integer, example: 5 }
+        name: { type: string, example: "Brake Pad" }
+        price:
+          type: number
+          format: float
+          example: 39.99
+
+    InventoryPayload:
+      type: object
+      required: [name, price]
+      properties:
+        name: { type: string, example: "Oil Filter" }
+        price:
+          type: number
+          format: float
+          example: 14.99
+
+    ServiceTicket:
+      type: object
+      properties:
+        id: { type: integer, example: 10 }
+        description: { type: string, example: "Brake squeaking issue" }
+        customer_id: { type: integer, example: 1 }
+        mechanics:
+          type: array
+          items: { $ref: '#/components/schemas/Mechanic' }
+        parts:
+          type: array
+          items: { $ref: '#/components/schemas/Inventory' }
+
+    EditTicketPayload:
+      type: object
+      properties:
+        add_ids:
+          type: array
+          items: { type: integer }
+          example: [2, 4]
+        remove_ids:
+          type: array
+          items: { type: integer }
+          example: [3]
+
+    AddPartPayload:
+      type: object
+      required: [inventory_id]
+      properties:
+        inventory_id: { type: integer, example: 5 }

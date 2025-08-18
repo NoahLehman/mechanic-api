@@ -1,6 +1,19 @@
+# run.py
 from app import create_app
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = create_app()
 
-if __name__ == '__main__':
+# Swagger UI setup
+SWAGGER_URL = '/docs'
+API_URL = '/static/swagger.yaml'  # Path to your Swagger spec
+swaggerui_bp = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={'app_name': "Mechanic Service API"},
+    blueprint_name="swagger_ui_mechanic"
+)
+app.register_blueprint(swaggerui_bp, url_prefix=SWAGGER_URL)
+
+if __name__ == "__main__":
     app.run(debug=True, port=5001)

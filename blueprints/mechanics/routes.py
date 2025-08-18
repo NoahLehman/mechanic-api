@@ -10,6 +10,24 @@ mechanics_bp = Blueprint("mechanics", __name__)
 @mechanics_bp.get("/leaderboard")
 @cache.cached(timeout=60, query_string=True)
 def leaderboard():
+    """
+    summary: Mechanics leaderboard
+    description: Returns mechanics ordered by most tickets worked
+    tags:
+      - Mechanics
+    parameters:
+      - in: query
+        name: limit
+        type: integer
+        description: Max number of mechanics to return
+    responses:
+      200:
+        description: List of mechanics with ticket counts
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/MechanicLeaderboardResponse'
+    """
     limit = request.args.get("limit", default=50, type=int)
 
     q = (

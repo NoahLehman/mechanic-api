@@ -12,29 +12,76 @@ service_tickets_bp = Blueprint("service_tickets", __name__)
 @service_tickets_bp.put("/<int:ticket_id>/edit")
 @token_required
 def edit_ticket_mechanics(ticket_id: int):
+    """
+    summary: Edit service ticket mechanics
+    description: Add or remove mechanics from a service ticket
+    tags:
+      - ServiceTickets
+    security:
+      - Bearer: []
+    parameters:
+      - in: path
+        name: ticket_id
+        required: true
+        type: integer
+        description: ID of the service ticket
+      - in: body
+        name: payload
+        schema: EditTicketPayload
+    responses:
+      200:
+        description: Updated service ticket
+        schema: ServiceTicketResponse
+      404:
+        description: Ticket not found
+    """
     st = ServiceTicket.query.get_or_404(ticket_id)
     payload = request.get_json() or {}
     add_ids = set(payload.get("add_ids", []))
     remove_ids = set(payload.get("remove_ids", []))
 
-    # Add mechanics
     if add_ids:
         for mid in add_ids:
             m = Mechanic.query.get(mid)
             if m and m not in st.mechanics:
                 st.mechanics.append(m)
 
-    # Remove mechanics
     if remove_ids:
         st.mechanics = [m for m in st.mechanics if m.id not in remove_ids]
 
     db.session.commit()
     return ServiceTicketSchema().dump(st), 200
 
+
 # POST /service_tickets/<ticket_id>/parts : add a single part to an existing ticket
 @service_tickets_bp.post("/<int:ticket_id>/parts")
 @token_required
 def add_part_to_ticket(ticket_id: int):
+    """
+    summary: Add part to service ticket
+    description: Adds an inventory part to an existing service ticket
+    tags:
+      - ServiceTickets
+    security:
+      - Bearer: []
+    parameters:
+      - in: path
+        name: ticket_id
+        required: true
+        type: integer
+        description: ID of the service ticket
+      - in: body
+        name: part
+        schema: AddPartPayload
+    responses:
+      201:
+        description: Part added to service ticket
+        schema: ServiceTicketResponse
+      400:
+        description: inventory_id is required
+      404:
+        description: Ticket or part not found
+    """
     st = ServiceTicket.query.get_or_404(ticket_id)
     body = request.get_json() or {}
     part_id = body.get("inventory_id")
