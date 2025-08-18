@@ -1,4 +1,3 @@
-# run.py
 from app import create_app
 from flask_swagger_ui import get_swaggerui_blueprint
 
@@ -6,7 +5,7 @@ app = create_app()
 
 # Swagger UI setup
 SWAGGER_URL = '/docs'
-API_URL = '/static/swagger.yaml'  # Path to your Swagger spec
+API_URL = '/static/swagger.yaml'
 swaggerui_bp = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,

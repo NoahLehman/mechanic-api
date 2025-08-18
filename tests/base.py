@@ -1,10 +1,9 @@
-# tests/base.py
 import unittest
 from app import create_app
 from extensions import db
 from models import Customer
 from werkzeug.security import generate_password_hash
-from auth import encode_token   # <-- add this
+from auth import encode_token
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
@@ -34,7 +33,6 @@ class BaseTestCase(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    # NEW: centralized auth header that runs encode_token inside app context
     def bearer(self, user_id=None):
         with self.app.app_context():
             token = encode_token(user_id or self.customer_id)

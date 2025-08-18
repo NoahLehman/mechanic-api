@@ -1,4 +1,3 @@
-# app/__init__.py
 import os
 from flask import Flask, current_app
 from config import Config

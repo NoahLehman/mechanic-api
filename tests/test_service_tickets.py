@@ -1,4 +1,3 @@
-# tests/test_service_tickets.py
 from tests.base import BaseTestCase
 from extensions import db
 from models import ServiceTicket, Mechanic, Inventory

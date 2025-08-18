@@ -1,4 +1,3 @@
-# tests/test_inventory.py
 from tests.base import BaseTestCase
 
 class TestInventory(BaseTestCase):
