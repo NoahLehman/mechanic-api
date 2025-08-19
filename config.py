@@ -1,6 +1,6 @@
 class Config:
     SECRET_KEY = "super-secret"   # change in production
-    JWT_ALGORITHM = "HS256"       # <--- THIS is missing in your case
+    JWT_ALGORITHM = "HS256"       #
 
     # Database
     SQLALCHEMY_DATABASE_URI = "sqlite:///mechanic.db"
