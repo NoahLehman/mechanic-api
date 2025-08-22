@@ -20,3 +20,9 @@ class ProductionConfig:
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLSQLALCHEMY_DATABASE_URI')
     CACHE_TYPE = "SimpleCache"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'super-secret'
+    JWT_ALGORITHM = "HS256"
+    CACHE_DEFAULT_TIMEOUT = 60
+
+    # Flask-Limiter
+    RATELIMIT_DEFAULT = "200 per hour"
+    RATELIMIT_STORAGE_URI = "memory://"
