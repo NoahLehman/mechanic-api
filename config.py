@@ -5,7 +5,7 @@ class Config:
     JWT_ALGORITHM = "HS256"       #
 
     # Database
-    SQLALCHEMY_DATABASE_URI = "sqlite:///mechanic.db"
+    SQLALCHEMY_DATABASE_URI = "postgresql://noahl:BlAqrYBUZQDtA60UoJ6QrKYFgxk4iCDJ@dpg-d2jrihf5r7bs73e37jc0-a.oregon-postgres.render.com/database_uyqs"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Flask-Caching

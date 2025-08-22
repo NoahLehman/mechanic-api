@@ -2,6 +2,8 @@ import os
 from flask import Flask, current_app
 from config import ProductionConfig as Config
 from extensions import db, limiter, cache
+import os
+from blueprints.admin.routes import admin_bp
 
 # imports for your blueprints:
 from blueprints.customers.routes import customers_bp
@@ -33,6 +35,8 @@ def create_app(config_class=Config, **config_overrides):
     app.register_blueprint(mechanics_bp, url_prefix="/mechanics")
     app.register_blueprint(service_tickets_bp, url_prefix="/service_tickets")
     app.register_blueprint(inventory_bp, url_prefix="/inventory")
+    if os.getenv("ENABLE_ADMIN_INIT") == "1":
+        app.register_blueprint(admin_bp)
 
     # Optional: per-blueprint rate limits
     limiter.limit(lambda: current_app.config.get("RATELIMIT_DEFAULT", "200 per hour"))(customers_bp)
