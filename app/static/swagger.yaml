@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for managing customers, mechanics, service tickets, and inventory.
 servers:
-  - url: http://localhost:5001
+  - url: https://mechanic-api-wdfs.onrender.com
 tags:
   - name: Auth
   - name: Customers
