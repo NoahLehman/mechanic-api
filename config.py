@@ -1,3 +1,5 @@
+import os
+
 class Config:
     SECRET_KEY = "super-secret"   # change in production
     JWT_ALGORITHM = "HS256"       #
@@ -13,3 +15,8 @@ class Config:
     # Flask-Limiter
     RATELIMIT_DEFAULT = "200 per hour"
     RATELIMIT_STORAGE_URI = "memory://"
+
+class ProductionConfig:
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLSQLALCHEMY_DATABASE_URI')
+    CACHE_TYPE = "SimpleCache"
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'super-secret'

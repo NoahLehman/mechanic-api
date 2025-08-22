@@ -1,6 +1,6 @@
 import os
 from flask import Flask, current_app
-from config import Config
+from config import ProductionConfig as Config
 from extensions import db, limiter, cache
 
 # imports for your blueprints:
