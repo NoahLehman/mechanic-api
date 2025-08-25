@@ -20,4 +20,5 @@ def init_db_endpoint():
     # Ensure an app context and run table creation (idempotent)
     with current_app.app_context():
         db.create_all()
+        import init_db
     return jsonify({"ok": True, "message": "Schema initialized (idempotent)."})
